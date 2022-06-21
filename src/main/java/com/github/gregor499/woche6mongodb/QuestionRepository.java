@@ -1,5 +1,6 @@
 package com.github.gregor499.woche6mongodb;
 
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -7,15 +8,7 @@ import java.util.List;
 
 @Repository
 
-public class QuestionRepository {
-	final private List<Question> questionList = new ArrayList<>();
+public interface QuestionRepository extends MongoRepository<Question, String> {
 
-	private Question addQuestion(Question newQuestion){
-		questionList.add(newQuestion);
-		return newQuestion;
-	}
-
-	private Question getQuestion(String id){
-		return questionList.get(id);
-	}
+    List<Question> findAllByApproved(boolean approvalStatus);
 }
