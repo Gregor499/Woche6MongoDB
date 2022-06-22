@@ -5,27 +5,26 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
 class IntegrationTest {
 
     @Autowired
-    TestRestTemplate testRestTemplate;
-/*
+    private TestRestTemplate restTemplate;
+
     @Test
- *//*   void integrationTest(){
-        ResponseEntity<Question[]> response = testRestTemplate.getForEntity("/api/questions", Question[].class);
+    void integrationTest() {
+        ResponseEntity<Question[]> getResponseEntity = restTemplate.getForEntity("/api/questions", Question[].class);
+        assertThat(getResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getResponseEntity.getBody()).isEmpty();
 
-        Assertions.assertThat(response.getBody()).hasSize(0);
-
-        Question testQuestion = new Question(null, "sas?", "seeees", true)
-
-        ResponseEntity<Question> response2 = testRestTemplate.postForEntity("/api/questions", testQuestion, Question.class);
-
-        Assertions.assertThat(response2.getBody().getId()).isNotBlank();
-
-        String testId
-    }*/
+        ResponseEntity<Question> createResponseEntity = restTemplate.postForEntity("/api/questions", new Question("1", "testfrage", "testanwort", true), Question.class);
+        assertThat(createResponseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(createResponseEntity.getBody().getId()).isEqualTo("1");
+    }
 }
